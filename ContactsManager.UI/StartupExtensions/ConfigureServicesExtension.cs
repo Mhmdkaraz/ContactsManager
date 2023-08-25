@@ -48,7 +48,14 @@ namespace CRUDExample.StartupExtensions {
             });
 
             //Enable Identity 
-            services.AddIdentity<ApplicationUser,ApplicationRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options => {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredUniqueChars = 3;
+            })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserStore<UserStore<ApplicationUser,ApplicationRole,ApplicationDbContext,Guid>>()
