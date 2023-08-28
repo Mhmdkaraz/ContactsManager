@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ContactsManager.UI.Controllers {
     //[Route("[controller]/[action]")]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     public class AccountController : Controller {
 
         private readonly UserManager<ApplicationUser> _userManager;
@@ -22,11 +22,14 @@ namespace ContactsManager.UI.Controllers {
         }
 
         [HttpGet]
+        [Authorize("NotAuthorized")]
         public IActionResult Register() {
             return View();
         }
 
         [HttpPost]
+        [Authorize("NotAuthorized")]
+
         public async Task<IActionResult> Register(RegisterDTO registerDTO) {
             //check for validation errors
             if (ModelState.IsValid == false) {
@@ -72,11 +75,15 @@ namespace ContactsManager.UI.Controllers {
         }
 
         [HttpGet]
+        [Authorize("NotAuthorized")]
+
         public IActionResult Login() {
             return View();
         }
 
         [HttpPost]
+        [Authorize("NotAuthorized")]
+
         public async Task<IActionResult> Login(LoginDTO loginDTO, string? ReturnUrl) {
             if (!ModelState.IsValid) {
                 ViewBag.Errors = ModelState.Values.SelectMany(temp => temp.Errors).Select(temp => temp.ErrorMessage);
@@ -99,6 +106,8 @@ namespace ContactsManager.UI.Controllers {
             ModelState.AddModelError("Login", "Invalid email or Password");
             return View(loginDTO);
         }
+
+        [Authorize]
         public async Task<IActionResult> Logout() {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
