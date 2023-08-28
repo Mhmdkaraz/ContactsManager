@@ -1,6 +1,7 @@
 ﻿using ContactsManager.Core.Domain.IdentityEntities;
 using CRUDExample.Filters.ActionFilters;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,12 @@ namespace CRUDExample.StartupExtensions {
                 .AddUserStore<UserStore<ApplicationUser,ApplicationRole,ApplicationDbContext,Guid>>()
                 .AddRoleStore<RoleStore<ApplicationRole,ApplicationDbContext,Guid>>();
 
+            services.AddAuthorization(options => {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();//enforces authorization policy (user must be authenticated) for all action methods
+            });
+            services.ConfigureApplicationCookie(options => {
+                options.LoginPath = "/Account/Login";
+            });
             services.AddHttpLogging(options => {
                 options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
                 //| Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponseBody;
