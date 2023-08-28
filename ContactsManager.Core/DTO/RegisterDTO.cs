@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactsManager.Core.Enums;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,11 +14,11 @@ namespace ContactsManager.Core.DTO {
 
         [Required(ErrorMessage = "Email can't be blank")]
         [EmailAddress(ErrorMessage = "Email should be in a proper email address format")]
-        [Remote(action: "IsEmailAlreadyRegistered",controller:"Account",ErrorMessage ="Email is already in use")]
+        [Remote(action: "IsEmailAlreadyRegistered", controller: "Account", ErrorMessage = "Email is already in use")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone can't be blank")]
-        [RegularExpression("^[0-9]*$",ErrorMessage = "Phone number should containg numbers only")]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Phone number should containg numbers only")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Password can't be blank")]
@@ -26,7 +27,9 @@ namespace ContactsManager.Core.DTO {
 
         [Required(ErrorMessage = "Confirm Password can't be blank")]
         [DataType(DataType.Password)]
-        [Compare("Password",ErrorMessage = "{0} and {1} do not match")]
+        [Compare("Password", ErrorMessage = "{0} and {1} do not match")]
         public string ConfirmPassword { get; set; }
+
+        public UserTypeOptions UserType { get; set; } = UserTypeOptions.User;
     }
 }
