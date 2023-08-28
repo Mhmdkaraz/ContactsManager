@@ -52,7 +52,7 @@ namespace ContactsManager.UI.Controllers {
                     //Add the new user into 'Admin' role
                     await _userManager.AddToRoleAsync(user, UserTypeOptions.Admin.ToString());
                 } else {
-                    if(await _roleManager.FindByNameAsync(UserTypeOptions.User.ToString()) is null) {
+                    if (await _roleManager.FindByNameAsync(UserTypeOptions.User.ToString()) is null) {
                         ApplicationRole applicationRole = new ApplicationRole() {
                             Name = UserTypeOptions.User.ToString(),
                         };
@@ -84,6 +84,13 @@ namespace ContactsManager.UI.Controllers {
             }
             var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded) {
+                //Admin
+                ApplicationUser user = await _userManager.FindByEmailAsync(loginDTO.Email);
+                if (user != null) {
+                    if (await _userManager.IsInRoleAsync(user, UserTypeOptions.Admin.ToString())) {
+                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    }
+                }
                 if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl)) {
                     return LocalRedirect(ReturnUrl);//same domain = same app
                 }

@@ -54,6 +54,9 @@ app.UseAuthentication();//Reading Identity cookie
 app.UseAuthorization();//validates access permissions of the user
 app.MapControllers();//Excecute the filter pipeline (action + filters)
 app.UseEndpoints(endpoints => {
+    endpoints.MapControllerRoute(name: "areas", pattern: "{area:exists}/{controller=Home}/{action=Index}");
+    //Admin/Home/Index
+    //Admin
     endpoints.MapControllerRoute(name: "default", pattern: "{controller}/{action}/{id?}");
 });
 app.Run();
