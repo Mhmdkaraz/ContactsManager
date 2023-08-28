@@ -36,7 +36,7 @@ namespace ContactsManager.UI.Controllers {
             };
             IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);
             if (result.Succeeded) {
-                await _signInManager.SignInAsync(user,isPersistent:false);//remember me
+                await _signInManager.SignInAsync(user, isPersistent: false);//remember me
                 return RedirectToAction(nameof(PersonsController.Index), "Persons");
             } else {
                 foreach (IdentityError error in result.Errors) {
@@ -44,6 +44,25 @@ namespace ContactsManager.UI.Controllers {
                 }
                 return View(registerDTO);
             }
+        }
+
+        [HttpGet]
+        public IActionResult Login() {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDTO loginDTO) {
+            if (!ModelState.IsValid) {
+                ViewBag.Errors = ModelState.Values.SelectMany(temp => temp.Errors).Select(temp => temp.ErrorMessage);
+                return View(loginDTO);
+            }
+            var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
+            if (result.Succeeded) {
+                return RedirectToAction(nameof(PersonsController.Index), "Persons");
+            }
+            ModelState.AddModelError("Login", "Invalid email or Password");
+            return View(loginDTO);
         }
     }
 }
