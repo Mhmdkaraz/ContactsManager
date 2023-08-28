@@ -64,5 +64,9 @@ namespace ContactsManager.UI.Controllers {
             ModelState.AddModelError("Login", "Invalid email or Password");
             return View(loginDTO);
         }
+        public async Task<IActionResult> Logout() {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(PersonsController.Index), "Persons");
+        }
     }
 }
