@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Error");
     app.UseExceptionHandlingMiddleware();
 }
-    
+
 
 app.UseHttpLogging();
 //app.Logger.LogDebug("debug-message");
@@ -53,6 +53,9 @@ app.UseRouting();//Identifying action method based on route
 app.UseAuthentication();//Reading Identity cookie
 app.UseAuthorization();//validates access permissions of the user
 app.MapControllers();//Excecute the filter pipeline (action + filters)
+app.UseEndpoints(endpoints => {
+    endpoints.MapControllerRoute(name: "default", pattern: "{controller}/{action}/{id?}");
+});
 app.Run();
 
 public partial class Program { } //make the auto-generated Program accessible programmatically
