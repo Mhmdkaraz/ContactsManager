@@ -29,13 +29,15 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
 builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
-app.UseSerilogRequestLogging();
 if (app.Environment.IsDevelopment()) {
     app.UseDeveloperExceptionPage();
 } else {
     app.UseExceptionHandler("/Error");
     app.UseExceptionHandlingMiddleware();
 }
+app.UseHsts();
+app.UseHttpsRedirection();
+app.UseSerilogRequestLogging();
 
 
 app.UseHttpLogging();
