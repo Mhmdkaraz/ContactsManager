@@ -29,6 +29,7 @@ namespace ContactsManager.UI.Controllers {
 
         [HttpPost]
         [Authorize("NotAuthorized")]
+        //[ValidateAntiForgeryToken]
 
         public async Task<IActionResult> Register(RegisterDTO registerDTO) {
             //check for validation errors
@@ -83,6 +84,8 @@ namespace ContactsManager.UI.Controllers {
 
         [HttpPost]
         [Authorize("NotAuthorized")]
+        //[ValidateAntiForgeryToken]
+
 
         public async Task<IActionResult> Login(LoginDTO loginDTO, string? ReturnUrl) {
             if (!ModelState.IsValid) {
@@ -112,6 +115,8 @@ namespace ContactsManager.UI.Controllers {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
         }
+
+        [AllowAnonymous]
         public async Task<IActionResult> IsEmailAlreadyRegistered(string email) {
             ApplicationUser? user = await _userManager.FindByEmailAsync(email);
             if (user == null) {

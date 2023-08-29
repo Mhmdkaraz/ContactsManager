@@ -4,6 +4,7 @@ using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
@@ -24,6 +25,7 @@ namespace CRUDExample.StartupExtensions {
                     Order = 2
                 });
                 //options.Filters.Add(new ResponseHeaderActionFilter("My-Key-From-Global", "My-Value-From-Global", 2));
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
             });
             //add services into Ioc Container
